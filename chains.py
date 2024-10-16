@@ -6,7 +6,7 @@ from langchain_core.exceptions import OutputParserException
 from dotenv import load_dotenv
 
 load_dotenv()
-groq_api_key=os.getenv('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')
+groq_api_key='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'
 print(groq_api_key,"shashank")
 class Chain:
     def __init__(self):
