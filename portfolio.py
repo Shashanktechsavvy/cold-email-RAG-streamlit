@@ -1,3 +1,9 @@
+import pysqlite3
+import sys
+
+# Override the default sqlite3 module with pysqlite3
+sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+
 import pandas as pd
 import chromadb
 import uuid
