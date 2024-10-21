@@ -4,6 +4,8 @@ import sys
 
 import pandas as pd
 import pysqlite3
+__import__('pysqlite3')
+
 sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 class Portfolio:
     def __init__(self, data):
