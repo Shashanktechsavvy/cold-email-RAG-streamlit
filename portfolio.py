@@ -10,7 +10,7 @@ import uuid
 
 
 class Portfolio:
-    def __init__(self, file_path="/workspaces/cold-email-RAG-streamlit/resource/myportfolio(Sheet1).csv"):
+    def __init__(self, file_path="/resource/myportfolio(Sheet1).csv"):
         self.file_path = file_path
         self.data = pd.read_csv(file_path)
         self.chroma_client = chromadb.PersistentClient('vectorstore')
