@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
+import pandas as pd
 
 from chains import Chain
 from portfolio import Portfolio
@@ -27,28 +28,51 @@ def scrape_job_description(url):
     finally:
         driver.quit()
 
-def create_streamlit_app(llm, portfolio, clean_text):
+def create_streamlit_app(llm, clean_text):
     st.title("📧 Cold Mail Generator")
-    url_input = st.text_input("Enter a URL:", value="https://careers.mastercard.com/us/en/job/R-230382/Senior-Software-Engineer")
-    submit_button = st.button("Submit")
 
-    if submit_button:
-        try:
-            with st.spinner("Scraping job description..."):
-                data = scrape_job_description(url_input)
-            data = clean_text(data)
-            portfolio.load_portfolio()
-            jobs = llm.extract_jobs(data)
-            for job in jobs:
-                skills = job.get('skills', [])
-                links = portfolio.query_links(skills)
-                email = llm.write_mail(job, links)
-                st.code(email, language='markdown')
-        except Exception as e:
-            st.error(f"An Error Occurred: {e}")
+    # Step 1: File uploader for CSV
+    uploaded_file = st.file_uploader("Upload a portfolio CSV file", type=["csv"])
+    if uploaded_file is not None:
+        # Step 2: Load the CSV file into a DataFrame and initialize Portfolio
+        if "portfolio" not in st.session_state:
+            data = pd.read_csv(uploaded_file)
+            st.session_state["portfolio"] = Portfolio(data)  # Initialize portfolio once
+
+        portfolio = st.session_state["portfolio"]
+        st.success("Portfolio loaded successfully!")
+
+        # Step 3: Allow multiple URL inputs once the file is uploaded
+        url_input = st.text_input("Enter a URL to scrape job description:")
+        submit_button = st.button("Submit")
+
+        if submit_button and url_input:
+            try:
+                with st.spinner("Scraping job description..."):
+                    data = scrape_job_description(url_input)
+                data = clean_text(data)
+
+                # Ensure previous results are cleared
+                if "jobs" in st.session_state:
+                    del st.session_state["jobs"]
+
+                # Load the portfolio and extract jobs
+                portfolio.load_portfolio()
+                jobs = llm.extract_jobs(data)
+                st.session_state["jobs"] = jobs  # Save the jobs to session state
+
+                for job in jobs:
+                    skills = job.get('skills', [])
+                    links = portfolio.query_links(skills)
+                    email = llm.write_mail(job, links)
+                    st.code(email, language='markdown')
+
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
+    else:
+        st.info("Please upload a CSV file to proceed.")
 
 if __name__ == "__main__":
     chain = Chain()
-    portfolio = Portfolio()
     st.set_page_config(layout="wide", page_title="Cold Email Generator", page_icon="📧")
-    create_streamlit_app(chain, portfolio, clean_text)
+    create_streamlit_app(chain, clean_text)

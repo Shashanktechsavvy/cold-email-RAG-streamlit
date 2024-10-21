@@ -1,18 +1,10 @@
-import pysqlite3
-import sys
-
-# Override the default sqlite3 module with pysqlite3
-sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
-
-import pandas as pd
 import chromadb
 import uuid
-
+import pandas as pd
 
 class Portfolio:
-    def __init__(self, file_path="/resource/myportfolio(Sheet1).csv"):
-        self.file_path = file_path
-        self.data = pd.read_csv(file_path)
+    def __init__(self, data):
+        self.data = data  # Expecting a DataFrame from the uploaded CSV
         self.chroma_client = chromadb.PersistentClient('vectorstore')
         self.collection = self.chroma_client.get_or_create_collection(name="portfolio")
 
