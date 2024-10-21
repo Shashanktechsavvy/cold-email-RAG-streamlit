@@ -1,7 +1,10 @@
 import chromadb
 import uuid
-import pandas as pd
+import sys
 
+import pandas as pd
+import pysqlite3
+sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 class Portfolio:
     def __init__(self, data):
         self.data = data  # Expecting a DataFrame from the uploaded CSV
