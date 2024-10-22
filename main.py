@@ -8,7 +8,14 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 import traceback  # <-- Import traceback for error logging
+import sys
 
+import pandas as pd
+import pysqlite3
+__import__('pysqlite3')
+#www
+
+sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 from chains import Chain
 from portfolio import Portfolio
 from utils import clean_text
