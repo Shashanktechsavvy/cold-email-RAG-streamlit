@@ -32,8 +32,7 @@ def scrape_job_description(url):
 
      # Set the binary location for Chromium (on Linux servers this is the typical location)
     driver = uc.Chrome(options=chrome_options)
-    # Initialize the driver using the ChromeDriver for Chromium
-    # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+ 
     
     try:
         driver.get(url)
