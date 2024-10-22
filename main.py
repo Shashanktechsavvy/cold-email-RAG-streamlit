@@ -18,22 +18,22 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 import traceback  # <-- Import traceback for error logging
+import undetected_chromedriver as uc
 
 from chains import Chain
 from portfolio import Portfolio
 from utils import clean_text
 
 def scrape_job_description(url):
-    chrome_options = Options()
+    chrome_options = uc.ChromeOptions()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
 
      # Set the binary location for Chromium (on Linux servers this is the typical location)
-    chrome_options.binary_location = "/usr/bin/google-chrome"
-
+    driver = uc.Chrome(options=chrome_options)
     # Initialize the driver using the ChromeDriver for Chromium
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+    # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     
     try:
         driver.get(url)
