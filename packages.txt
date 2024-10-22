@@ -1,11 +1,7 @@
-
-chromium
-chromium-chromedriver
+wget
+unzip
+xvfb
 libnss3
 libgconf-2-4
 libxss1
-libappindicator1
-libindicator7
-xvfb
-wget
-unzip
+libappindicator3-1
