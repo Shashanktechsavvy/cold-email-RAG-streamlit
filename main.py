@@ -7,6 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
+import traceback  # <-- Import traceback for error logging
 
 from chains import Chain
 from portfolio import Portfolio
@@ -68,6 +69,8 @@ def create_streamlit_app(llm, clean_text):
                     st.code(email, language='markdown')
 
             except Exception as e:
+                # Log the full stack trace to the terminal
+                traceback.print_exc()  # <-- Add this line to log full error to the terminal
                 st.error(f"An error occurred: {e}")
     else:
         st.info("Please upload a CSV file to proceed.")
