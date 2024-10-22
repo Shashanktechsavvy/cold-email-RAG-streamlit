@@ -19,6 +19,10 @@ def scrape_job_description(url):
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
 
+     # Set the binary location for Chromium (on Linux servers this is the typical location)
+    chrome_options.binary_location = "/usr/bin/chromium-browser"
+
+    # Initialize the driver using the ChromeDriver for Chromium
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     
     try:
