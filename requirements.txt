@@ -109,6 +109,9 @@ parse==1.20.2
 parso==0.8.4
 pexpect==4.9.0
 pillow==10.4.0
+pinecone==5.3.1
+pinecone-plugin-inference==1.1.0
+pinecone-plugin-interface==0.0.7
 platformdirs==4.3.6
 
 posthog==3.7.0
